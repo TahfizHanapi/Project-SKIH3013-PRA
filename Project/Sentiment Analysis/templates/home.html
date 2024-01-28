@@ -9,7 +9,7 @@
         body {
             margin: 0;
             padding: 0;
-            background-image: url('https://wallpapercave.com/wp/wp1912958.jpg');
+            background-image: url('../static/img/bg.png');
             background-size: cover;
             background-position: center;
             height: 100vh;
@@ -19,32 +19,36 @@
         }
 
         .box {
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(154, 200, 241, 0.78);
+            width: 400px;
             padding: 20px;
             border-radius: 20px;
             text-align: center;
         }
 
-        .input-box {
-            background-color: rgba(255, 255, 255, 0.8);
+
+        .input{
+            background-color: rgba(229, 193, 148, 0.78);
             padding: 20px;
             border-radius: 20px;
+            border-color: rgba(229, 193, 148, 0.78);
             text-align: center;
         }
-
 
         button{
+        margin: 10px;
+        border: none;
         width: 165px;
         height: 62px;
         cursor: pointer;
         color: #fff;
         font-size: 17px;
         border-radius: 1rem;
-        border: none;
         position: relative;
         background: #100720;
         transition: 0.1s;
          }
+
          button::after{
             content: "";
             width: 100%;
@@ -67,15 +71,81 @@
 
          }
 
+         .modal1 {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-image: url("../static/img/positive.png");
+            background-size: cover;
+        }
+
+         .modal2 {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-image: url("../static/img/negative.png");
+             background-size: cover;
+        }
+
+         .modal3 {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-image: url("../static/img/neutral.png");
+            background-size: cover;
+        }
+
+         .close {
+            font-size: 50px;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            left: 30px;
+            color: white;
+        }
+
     </style>
 </head>
 <body>
 
     <div class="box">
         <div class="input-box">
-            <input type="text" id="userInput" placeholder="Enter your comment">
+            <input type="text" id="userInput" class= "input" placeholder="Enter your comment">
         </div>
         <button onclick="predictSentiment()">Check</button>
+    </div>
+
+    <!-- Positive Modal -->
+    <div id="positiveModal" class="modal1">
+            <span class="close" onclick="closeModal('positiveModal')">&times;</span>
+            <p id="positiveResult"></p>
+    </div>
+
+    <!-- Negative Modal -->
+    <div id="negativeModal" class="modal2">
+            <span class="close" onclick="closeModal('negativeModal')">&times;</span>
+            <p id="negativeResult"></p>
+    </div>
+
+    <!-- Neutral Modal -->
+    <div id="neutralModal" class="modal3">
+            <span class="close" onclick="closeModal('neutralModal')">&times;</span>
+            <p id="neutralResult"></p>
     </div>
 
     <script>
@@ -91,9 +161,20 @@
             })
             .then(response => response.json())
             .then(data => {
-                alert('Predicted Sentiment: ' + data.predicted_sentiment);
+                // Display the corresponding modal based on sentiment
+                if (data.predicted_sentiment === 'Positive') {
+                    document.getElementById('positiveModal').style.display = 'block';
+                } else if (data.predicted_sentiment === 'Negative') {
+                    document.getElementById('negativeModal').style.display = 'block';
+                } else {
+                    document.getElementById('neutralModal').style.display = 'block';
+                }
             })
             .catch(error => console.error('Error:', error));
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
     </script>
 
