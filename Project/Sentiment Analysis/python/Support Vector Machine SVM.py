@@ -13,11 +13,9 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-# Initialize NLTK sentiment analyzer
-analyzer = SentimentIntensityAnalyzer()
-
 # Load the dataset
 df = pd.read_csv('Reddit_Data.csv')
+
 
 # Function for text preprocessing
 def preprocess_text(text):
@@ -34,11 +32,13 @@ def preprocess_text(text):
     processed_text = ' '.join(lemmatized_tokens)
     return processed_text
 
+
 # Preprocess the 'clean_comment' column
 df['clean_comment'] = df['clean_comment'].apply(preprocess_text)
 
 # Initialize NLTK sentiment analyzer
 analyzer = SentimentIntensityAnalyzer()
+
 
 # Function to get sentiment using NLTK
 def get_sentiment(text):
@@ -57,6 +57,7 @@ def get_sentiment(text):
         sentiment = 0  # neutral
 
     return sentiment
+
 
 # Apply sentiment analysis to 'clean_comment' column
 df['sentiment'] = df['clean_comment'].apply(get_sentiment)
