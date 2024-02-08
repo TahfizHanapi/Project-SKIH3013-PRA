@@ -58,7 +58,7 @@ def show_wordcloud(data, title=None):
 
 
 # Load your data
-df = pd.read_csv('C:\\Users\\USER\\Desktop\\PRA\\PRA Project\\static\\csv\\Reddit_Data.csv')
+df = pd.read_csv('C:\Users\Tahfiz\Documents\UUM\SEM 5\Pattern Recognition & Analysis\Project-SKIH3013-PRA\Project\Sentiment Analysis\python\Reddit_Data.csv')
 
 # Fill NaN values with an empty string
 df['clean_comment'] = df['clean_comment'].fillna('')

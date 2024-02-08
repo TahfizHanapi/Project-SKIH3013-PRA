@@ -15,6 +15,15 @@ from nltk.stem import WordNetLemmatizer
 
 app = Flask(__name__)
 
+# Function to construct filenames for trained models based on subreddit
+def get_model_filenames(subreddit):
+    prefix = f'{subreddit.lower()}_'
+    return {
+        'tfidf_vectorizer': f'{prefix}tfidf_vectorizer.joblib',
+        'svm_classifier': f'{prefix}svm_classifier.joblib',
+        'gbm_classifier': f'{prefix}gbm_classifier.joblib',
+        'mlp_classifier': f'{prefix}mlp_classifier.joblib'
+    }
 
 @app.route('/')
 def index():
@@ -27,10 +36,10 @@ def analyze():
     keyword = request.form['keyword']
 
     # Your Reddit scraping code here
-    filtered_Headlines = scrape_reddit(subreddit_name, keyword)
+    filtered_headlines = scrape_reddit(subreddit_name, keyword)
 
-    # Convert the list of Headlines to a DataFrame
-    df = pd.DataFrame({'Headline': filtered_Headlines})
+    # Convert the list of headlines to a DataFrame
+    df = pd.DataFrame({'Headline': filtered_headlines})
 
     # Define the CSV file name including the keyword
     csv_file_name = f'{subreddit_name}_{keyword}.csv'
@@ -39,7 +48,7 @@ def analyze():
     df.to_csv(csv_file_name, index=False)
 
     # Perform sentiment prediction using majority vote
-    predictions = predict_from_csv(csv_file_name)
+    predictions = predict_from_csv(csv_file_name, subreddit_name)
     df['sentiment'] = predictions
 
     # Generate plots and related output
@@ -52,7 +61,7 @@ def analyze():
     plot_buffer.seek(0)
     plot_data_uri = base64.b64encode(plot_buffer.read()).decode('utf-8')
 
-    #Convert DataFrame to HTML table
+    # Convert DataFrame to HTML table
     table_html = df.to_html()
 
     return render_template('index.html', plot_data_uri=plot_data_uri, table_html=table_html)
@@ -64,8 +73,8 @@ def scrape_reddit(subreddit_name, keyword):
                          client_secret='pIR4KDYFE0cxjBh73acT7voeSEKm7g',
                          user_agent='LapSent')
 
-    # Create a list to store the filtered Headlines
-    filtered_Headlines = []
+    # Create a list to store the filtered headlines
+    filtered_headlines = []
 
     # Set the time range for submissions (from today to one year ago)
     end_time = int(time.time())  # Current epoch time
@@ -75,23 +84,24 @@ def scrape_reddit(subreddit_name, keyword):
     for submission in reddit.subreddit(subreddit_name).search(f'{keyword}', time_filter='year', limit=None):
         # Check if the keyword is in the title
         if keyword.lower() in submission.title.lower():
-            # Add the Headline to the list
-            filtered_Headlines.append(submission.title)
+            # Add the headline to the list
+            filtered_headlines.append(submission.title)
 
-    return filtered_Headlines
+    return filtered_headlines
 
 
-def predict_from_csv(csv_file_path):
+def predict_from_csv(csv_file_path, subreddit):
     try:
         models_directory = Path('python')
 
-        # Load the saved models
-        svm_classifier = load(models_directory / 'svm_classifier.joblib')
-        gbm_classifier = load(models_directory / 'gbm_classifier.joblib')
-        mlp_classifier = load(models_directory / 'mlp_classifier.joblib')
+        # Load the saved models based on subreddit
+        model_filenames = get_model_filenames(subreddit)
+        svm_classifier = load(models_directory / model_filenames['svm_classifier'])
+        gbm_classifier = load(models_directory / model_filenames['gbm_classifier'])
+        mlp_classifier = load(models_directory / model_filenames['mlp_classifier'])
 
         # Load the TF-IDF vectorizer used during training
-        vectorizer = load(models_directory / 'tfidf_vectorizer.joblib')
+        vectorizer = load(models_directory / model_filenames['tfidf_vectorizer'])
 
         # Read the CSV file
         df = pd.read_csv(csv_file_path)
@@ -140,39 +150,6 @@ def preprocess_text(text):
     processed_text = ' '.join(lemmatized_tokens)
 
     return processed_text
-
-
-# @app.route('/upload', methods=['POST'])
-# def upload():
-#     if 'file' not in request.files:
-#         return render_template('index.html', message='No file part')
-#
-#     file = request.files['file']
-#
-#     if file.filename == '':
-#         return render_template('index.html', message='No selected file')
-#
-#     if file:
-#         df = pd.read_csv(file)
-#
-#         # Perform sentiment prediction using majority vote
-#         predictions = predict_from_csv(file)
-#         df['sentiment'] = predictions
-#
-#         # Generate plots and related output
-#         fig, ax = plt.subplots()
-#         # Example plot
-#         df.plot(ax=ax)
-#         # Save plot to a BytesIO object
-#         plot_buffer = BytesIO()
-#         plt.savefig(plot_buffer, format='png')
-#         plot_buffer.seek(0)
-#         plot_data_uri = base64.b64encode(plot_buffer.read()).decode('utf-8')
-#
-#         # Convert DataFrame to HTML table
-#         table_html = df.to_html()
-#
-#         return render_template('index.html', plot_data_uri=plot_data_uri, table_html=table_html)
 
 
 if __name__ == '__main__':
