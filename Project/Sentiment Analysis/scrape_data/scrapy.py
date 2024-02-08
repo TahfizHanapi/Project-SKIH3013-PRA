@@ -16,7 +16,7 @@ reddit = praw.Reddit(client_id='UwQGu_BZV3plC9jLCXaRTg',
 
 headlines = set()
 
-for submission in reddit.subreddit('mazda').new(limit=None):
+for submission in reddit.subreddit('toyota').new(limit=None):
     headlines.add(submission.title)
     display.clear_output()
     print(len(headlines))
@@ -42,7 +42,7 @@ df.loc[df['compound'] < -0.2, 'label'] = -1
 df.head()
 
 df2 = df[['headline', 'label']]
-df2.to_csv('mazda.csv', mode='a', encoding='utf-8', index=False)
+df2.to_csv('toyota.csv', mode='a', encoding='utf-8', index=False)
 
 print("Positive headlines:\n")
 pprint(list(df[df['label'] == 1].headline)[:5], width=200)
