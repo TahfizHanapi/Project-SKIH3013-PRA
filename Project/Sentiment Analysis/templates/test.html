@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Contact V4</title>
+    <title>Car Brand Sentiment</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -22,6 +22,34 @@
     <link rel="stylesheet" type="text/css" href="../static/css/main.css">
 
     <meta name="robots" content="noindex, follow">
+
+    <style>
+        .form-select {
+    margin-top: 0px;
+    width: 200px; /* Adjust the width as needed */
+    padding: 12px; /* Increase padding for a larger button */
+    border: none; /* Remove border */
+    border-radius: 25px; /* Increase border radius for a rounded button */
+    background-color: #FC00FFFF; /* Green background color */
+    color: rgba(94, 29, 8, 100); /* White text color */
+    font-size: 16px;
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s; /* Add smooth transition effect */
+}
+
+/* Add hover effect */
+.form-select:hover {
+    background-color: rgba(238, 113, 209, 0.95); /* Darker green color on hover */
+}
+
+        .input-group-text {
+            /* Your custom styles for the input group text container */
+            margin-top: 5px;
+            background-color: rgba(0, 219, 222, 0);
+            border: 0;
+        }
+    </style>
+
 </head>
 <body>
 <div class="container-contact100">
@@ -31,12 +59,12 @@
 		Car Brand Sentiment Analyzer
 		</span>
             <div class="wrap-input100 input100-select">
-                <span class="label-input100">Car Brands</span>
+                <span class="label-input100">Car Brands:</span>
                 <div class="input-group-text">
 
                     <label>
                         <select class="form-select">
-                            <option>Select Car Brands</option>
+                            <option>Select</option>
                             <option>One</option>
                             <option>Two</option>
                             <option>Three</option>

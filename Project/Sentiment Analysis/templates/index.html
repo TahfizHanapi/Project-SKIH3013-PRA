@@ -23,6 +23,7 @@
     <input type="text" id="keyword" name="keyword"><br><br>
     <input type="submit" value="Analyze">
 </form>
+
 {% if plot_data_uri %}
 <img src="data:image/png;base64,{{ plot_data_uri }}" alt="Plot">
 {% endif %}

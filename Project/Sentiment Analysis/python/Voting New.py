@@ -119,7 +119,7 @@ print("\nAccuracy on Test Set (GBM):", accuracy_gbm)
 print("\nAccuracy on Test Set (MLP):", accuracy_mlp)
 
 # Save trained models
-# dump(vectorizer, 'toyota_tfidf_vectorizer.joblib')
-# dump(svm_classifier, 'toyota_svm_classifier.joblib')
-# dump(gbm_classifier, 'toyota_gbm_classifier.joblib')
-# dump(mlp_classifier, 'toyota_mlp_classifier.joblib')
+dump(vectorizer, 'toyota_tfidf_vectorizer.joblib')
+dump(svm_classifier, 'toyota_svm_classifier.joblib')
+dump(gbm_classifier, 'toyota_gbm_classifier.joblib')
+dump(mlp_classifier, 'toyota_mlp_classifier.joblib')
