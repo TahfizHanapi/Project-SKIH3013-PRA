@@ -26,8 +26,12 @@ def get_model_filenames(subreddit):
     }
 
 @app.route('/')
-def index():
-    return render_template('home.html')
+def menu():
+    return render_template('menu.html')
+
+@app.route('/keyword')
+def keyword():
+    return render_template('keyword.html')
 
 
 @app.route('/analyze', methods=['POST'])
