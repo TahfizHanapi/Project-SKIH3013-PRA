@@ -27,7 +27,7 @@ def get_model_filenames(subreddit):
 
 @app.route('/')
 def index():
-    return render_template('test.html')
+    return render_template('home.html')
 
 
 @app.route('/analyze', methods=['POST'])
