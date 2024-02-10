@@ -15,6 +15,37 @@ from nltk.stem import WordNetLemmatizer
 
 app = Flask(__name__)
 
+
+@app.route('/')
+def land():
+    return render_template('land.html')
+
+
+@app.route('/plot')
+def plot():
+    return render_template('plot.html')
+
+
+@app.route('/table')
+def table():
+    return render_template('table.html')
+
+
+@app.route('/menu')
+def menu():
+    return render_template('menu.html')
+
+
+@app.route('/index')
+def index():
+    return render_template('brand.html')
+
+
+@app.route('/keyword')
+def keyword():
+    return render_template('keyword.html')
+
+
 # Function to construct filenames for trained models based on subreddit
 def get_model_filenames(subreddit):
     prefix = f'{subreddit.lower()}_'
@@ -25,29 +56,6 @@ def get_model_filenames(subreddit):
         'mlp_classifier': f'{prefix}mlp_classifier.joblib'
     }
 
-
-@app.route('/')
-def land():
-    return render_template('land.html')
-
-@app.route('/plot')
-def plot():
-    return render_template('plot.html')
-
-@app.route('/table')
-def table():
-    return render_template('table.html')
-
-@app.route('/menu')
-def menu():
-    return render_template('menu.html')
-@app.route('/index')
-def index():
-    return render_template('brand.html')
-
-@app.route('/keyword')
-def keyword():
-    return render_template('keyword.html')
 
 @app.route('/analyze', methods=['POST'])
 def analyze():

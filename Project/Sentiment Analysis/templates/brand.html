@@ -4,221 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Brand Sentiment</title>
-    <link rel="icon" type="image/x-icon" href="../static/img/icon.png" />
+    <link rel="icon" type="image/x-icon" href="../static/static/img/icon.png"/>
+    <link rel="stylesheet" type="text/css" href="../static/static/css/brand.css"/>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url("../static/img/bg.png");
-            background-size: 100%;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .box {
-            width: 400px;
-            background-color: #fff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .box h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        /* Style for the button wrapper */
-        .button-wrapper {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        /* Style for the buttons */
-        .button-wrapper button {
-            width: calc(33.33% - 10px); /* 33.33% width with margin between buttons */
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-            cursor: pointer;
-        }
-
-        .button-wrapper button:hover {
-            background-color: #e0e0e0;
-        }
-
-        /* Style for the selected option box */
-        .selected-option-box {
-            background-color: #f9f9f9;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 10px;
-            margin-top: 10px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-
-        /* Styles for modal content */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            border-radius: 5px;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-        }
-
-        /* Close button style */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Button wrapper style */
-        .button-wrapper {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-        /* Button style */
-        .button-wrapper button {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-            cursor: pointer;
-        }
-
-        .button-wrapper button:hover {
-            background-color: #e0e0e0;
-        }
-
-        .button1 {
-            background-image: url("../static/img/toyota.png");
-            background-size: cover;
-            background-position: center;
-        }
-
-        .button2 {
-            background-image: url("../static/img/nissan.png");
-            background-size: cover;
-            background-position: center;
-        }
-
-        .button3 {
-            background-image: url("../static/img/mazda.png");
-            background-size: cover;
-            background-position: center;
-        }
-
-        .button1, .button2, .button3{
-            height: 200px;
-            width: 200px;
-        }
-
-        h1, h2 {
-            color: #174D74;
-        }
-
-        h2 {
-            margin-left: 43%;
-        }
-
-        .content {
-            margin-top: 50px;
-        }
-
-        .submit {
-            margin-left: 25%;
-            width: 200px;
-            height: 30px;
-            background-color: #193556;
-            border: 0;
-            border-radius: 10px;
-            color: #ffffff;
-        }
-
-        .choose {
-            background-color: #0c527a;
-            border: 0;
-            border-radius: 10px;
-            color: #ffffff;
-            width: 150px;
-        }
-
-        .box {
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9); /* Add shadow */
-            border-radius: 10px; /* Add rounded corners */
-            padding: 20px; /* Add padding for better spacing */
-        }
-
-        .button-wrapper button {
-            padding: 10px 20px; /* Increase padding for better visual appeal */
-            border: none; /* Remove border */
-            border-radius: 5px;
-            background-color: #007bff; /* Blue background color */
-            color: #fff; /* White text color */
-            font-size: 16px; /* Increase font size */
-            font-weight: bold; /* Make text bold */
-            cursor: pointer;
-            transition: background-color 0.3s; /* Smooth transition for hover effect */
-        }
-
-        .button-wrapper button:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
-
-        .button-wrapper button:active {
-            background-color: #003366; /* Even darker blue when clicked */
-        }
-
-        .keyword {
-            width: 150px;
-
-        }
-
-        #chooseModal {
-            display: none; /* Initially hide the chooseModal */
-        }
-
-
-    </style>
 </head>
 <body>
 
@@ -235,10 +23,6 @@
         <!-- Box to display the selected option -->
         <div class="form-group selected-option-box" id="selected_option_box">
             Selected Option: <span id="selected_option_text"></span>
-        </div>
-        <div class="form-group">
-            <label for="keyword">Specification:</label>
-            <input class="keyword" type="text" id="keyword" name="keyword" required>
         </div>
         <input class="submit" type="submit" value="Analyze" onclick="submitForm()">
     </form>
@@ -310,39 +94,39 @@
     }
 
     // Function to submit the form
-function submitForm() {
-    // Submit the form asynchronously using JavaScript Fetch API
-    fetch('/analyze', {
-        method: 'POST',
-        body: new FormData(document.getElementById('analysisForm'))
-    })
-    .then(response => {
-        if (response.ok) {
-            // Open the chooseModal modal when the form submission is successful
-            openModalChoose();
-        } else {
-            // Handle errors if the form submission fails
-            console.error('Form submission failed');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
+    function submitForm() {
+        // Submit the form asynchronously using JavaScript Fetch API
+        fetch('/analyze', {
+            method: 'POST',
+            body: new FormData(document.getElementById('analysisForm'))
+        })
+            .then(response => {
+                if (response.ok) {
+                    // Open the chooseModal modal when the form submission is successful
+                    openModalChoose();
+                } else {
+                    // Handle errors if the form submission fails
+                    console.error('Form submission failed');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
 
     function redirectToPlot() {
-      window.location.href = "plot";
+        window.location.href = "plot";
     }
 
     function redirectToTable() {
-      window.location.href = "table";
+        window.location.href = "table";
     }
 
     // Add click event listener to the entire document
-    document.addEventListener("click", function() {
-      // Call the redirect function when the document is clicked
-      redirectToMenu();
-      redirectToTable();
+    document.addEventListener("click", function () {
+        // Call the redirect function when the document is clicked
+        redirectToMenu();
+        redirectToTable();
     });
 
     function openModalChoose() {
