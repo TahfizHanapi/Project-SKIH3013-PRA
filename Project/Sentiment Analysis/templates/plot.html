@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Brand Sentiment</title>
+    <link rel="icon" type="image/x-icon" href="../static/img/icon.png" />
+</head>
+<body>
+{% if plot_data_uri %}
+<img src="data:image/png;base64,{{ plot_data_uri }}" alt="Plot">
+{% endif %}
+{% if table_html %}
+</body>
+</html>

@@ -25,14 +25,29 @@ def get_model_filenames(subreddit):
         'mlp_classifier': f'{prefix}mlp_classifier.joblib'
     }
 
+
 @app.route('/')
+def land():
+    return render_template('land.html')
+
+@app.route('/plot')
+def plot():
+    return render_template('plot.html')
+
+@app.route('/table')
+def table():
+    return render_template('table.html')
+
+@app.route('/menu')
 def menu():
     return render_template('menu.html')
+@app.route('/index')
+def index():
+    return render_template('brand.html')
 
 @app.route('/keyword')
 def keyword():
     return render_template('keyword.html')
-
 
 @app.route('/analyze', methods=['POST'])
 def analyze():
@@ -54,6 +69,7 @@ def analyze():
     # Perform sentiment prediction using majority vote
     predictions = predict_from_csv(csv_file_name, subreddit_name)
     df['sentiment'] = predictions
+    df.to_csv('predicted.csv', index=False)
 
     # Generate plots and related output
     fig, ax = plt.subplots()
@@ -68,7 +84,7 @@ def analyze():
     # Convert DataFrame to HTML table
     table_html = df.to_html()
 
-    return render_template('index.html', plot_data_uri=plot_data_uri, table_html=table_html)
+    return render_template('brand.html', plot_data_uri=plot_data_uri, table_html=table_html)
 
 
 def scrape_reddit(subreddit_name, keyword):
