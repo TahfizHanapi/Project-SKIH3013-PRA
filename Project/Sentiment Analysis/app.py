@@ -1,3 +1,4 @@
+import nltk
 from flask import Flask, render_template, request
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,11 +8,12 @@ from joblib import load
 from collections import Counter
 import praw
 import time
-from datetime import datetime, timedelta
+from pprint import pprint
 from pathlib import Path
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, RegexpTokenizer
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
+import seaborn as sns
 
 app = Flask(__name__)
 
@@ -41,9 +43,9 @@ def index():
     return render_template('brand.html')
 
 
-@app.route('/keyword')
-def keyword():
-    return render_template('keyword.html')
+@app.route('/spec')
+def spec():
+    return render_template('spec.html')
 
 
 # Function to construct filenames for trained models based on subreddit
@@ -55,6 +57,85 @@ def get_model_filenames(subreddit):
         'gbm_classifier': f'{prefix}gbm_classifier.joblib',
         'mlp_classifier': f'{prefix}mlp_classifier.joblib'
     }
+
+
+def get_csv_filenames(subreddit):
+    prefix = f'{subreddit.lower()}'
+    return f'{prefix}.csv'
+
+
+@app.route('/brand_detail', methods=['POST'])
+def brand_detail():
+    subreddit_name = request.form['subreddit_name']
+    csv_directory = Path('Project/Sentiment Analysis/scrape_data')
+    # Load the saved csv based on subreddit
+    model_filename = get_csv_filenames(subreddit_name)
+    print(model_filename)
+
+    csv_file_path = csv_directory / model_filename
+    df = pd.read_csv(csv_file_path)
+
+    print("Positive headlines:\n")
+    pprint(list(df[df['label'] == 1].headline)[:5], width=200)
+
+    print("\nNegative headlines:\n")
+    pprint(list(df[df['label'] == -1].headline)[:5], width=200)
+
+    print(df.label.value_counts())
+
+    print(df.label.value_counts(normalize=True) * 100)
+
+    fig, ax = plt.subplots(figsize=(8, 8))
+
+    counts = df.label.value_counts(normalize=True) * 100
+
+    sns.barplot(x=counts.index, y=counts, ax=ax)
+
+    ax.set_xticklabels(['Negative', 'Neutral', 'Positive'])
+    ax.set_ylabel("Percentage")
+
+    # Save the plot as a PNG image
+    sentiment_plot_path = 'sentiment_plot.png'
+    plt.savefig(sentiment_plot_path)
+
+    # Prepare the nltk tokenizer and stopwords
+    tokenizer = RegexpTokenizer(r'\w+')
+    stop_words = stopwords.words('english')
+
+    def process_text(headlines):
+        tokens = []
+        for line in headlines:
+            toks = tokenizer.tokenize(line)
+            toks = [t.lower() for t in toks if t.lower() not in stop_words]
+            tokens.extend(toks)
+
+        return tokens
+
+    pos_lines = list(df[df.label == 1].headline)
+
+    pos_tokens = process_text(pos_lines)
+    pos_freq = nltk.FreqDist(pos_tokens)
+
+    pos_freq.most_common(20)
+
+    y_val = [x[1] for x in pos_freq.most_common()]
+
+    fig = plt.figure(figsize=(10, 5))
+    plt.plot(y_val)
+
+    plt.xlabel("Words")
+    plt.ylabel("Frequency")
+    plt.title("Word Frequency Distribution (Positive)")
+
+    # Save the positive sentiment plot as a PNG image
+    positive_plot_path = 'positive_plot.png'
+    plt.savefig(positive_plot_path)
+
+    # Prepare and save the negative sentiment plot in a similar manner
+
+    return render_template('display_brand_sentiment.html',
+                           sentiment_plot=sentiment_plot_path,
+                           positive_plot=positive_plot_path)
 
 
 @app.route('/analyze', methods=['POST'])

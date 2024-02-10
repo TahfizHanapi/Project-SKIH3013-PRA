@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
 
 <div class="box">
     <h1>Car Brand <br> Sentiment Analysis</h1>
-    <form class="content" id="analysisForm" action="/brand_detail" method="post">
+    <form class="content" id="analysisForm" action="/analyze" method="post">
         <div class="form-group">
             <label>Car Brand:</label>
             <button class="choose" type="button" onclick="openModal()">Choose Brand</button>
@@ -22,6 +23,10 @@
         <!-- Box to display the selected option -->
         <div class="form-group selected-option-box" id="selected_option_box">
             Selected Option: <span id="selected_option_text"></span>
+        </div>
+        <div class="form-group">
+            <label for="keyword">Keyword:</label>
+            <input type="text" id="keyword" name="keyword">
         </div>
         <input class="submit" type="submit" value="Analyze" onclick="submitForm()">
     </form>
@@ -51,7 +56,12 @@
         </div>
     </div>
 </div>
-
+{% if plot_data_uri %}
+<img src="data:image/png;base64,{{ plot_data_uri }}" alt="Plot">
+{% endif %}
+{% if table_html %}
+{{ table_html | safe }}
+{% endif %}
 <script>
     // Function to open the modal
     function openModal() {
